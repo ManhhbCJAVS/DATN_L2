@@ -42,6 +42,9 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressCustomerResponse updateAddress(UpdateAddressRequest updateAddressRequest) {
         Address address = addressMapper.toAddress(updateAddressRequest);
+        if("DEFAULT".equals(updateAddressRequest.getStatus())) {
+            updateStatusForAddressesByCustomerId(updateAddressRequest.getCustomerId());
+        }
         logger.debug("Update address: {}", address);
         addressRepository.save(address);
         return addressMapper.toAddressCustomerResponse(address);
